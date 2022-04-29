@@ -31,7 +31,6 @@ function clearDisplay(){
 }
 
 function clearInput() {
-    console.log('clearhit');
     clearDisplay();
     currentInput.length = 0;
     savedInput.length = 0;
@@ -49,9 +48,11 @@ function saveInput(e) {
 }
 
 function operatorClick(e) {
-    console.log('operatorclick');
-    savedInput = currentInput.slice();
-    currentInput.length = 0;
+    if (operatorClicked === false){
+        savedInput = currentInput.slice();
+        currentInput.length = 0;
+        operatorClicked = true;
+    }
     savedOperator = e.target.id;
 }
 
@@ -60,6 +61,7 @@ function operatorClick(e) {
 let currentInput = [];
 let savedInput = [];
 let savedOperator = 0;
+let operatorClicked = false;
 const display = document.querySelector('.display');
 const numberButtons = document.querySelectorAll('button.number');
 const operatorButtons = document.querySelectorAll('button.operator');
@@ -86,6 +88,7 @@ equalButton.addEventListener('click', () =>{
         const result = operate(n1, n2, savedOperator);
         currentInput.length = 0;
         currentInput.push(result);
+        operatorClicked = false;
         clearDisplay();
         populateDisplay();
         
