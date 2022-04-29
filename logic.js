@@ -27,7 +27,9 @@ function operate(n1, n2, operator) {
 }
 
 function clearDisplay(){
-    display.textContent = '0';
+    currentDisplay.textContent = '0';
+    savedDisplay.textContent = '';
+    operatorDisplay.textContent = '';
 }
 
 function clearInput() {
@@ -37,14 +39,20 @@ function clearInput() {
     savedOperator = 0;
 }
 
-function populateDisplay(input) {
-    display.textContent = currentInput.join('');
+function populateDisplay() {
+    currentDisplay.textContent = currentInput.join('');
+    savedDisplay.textContent = savedInput.join('');
+    if(operatorClicked === true){
+        operatorDisplay.textContent = savedOperator;
+    }
+    else{
+        operatorDisplay.textContent = '';
+    }
 }
 
 function saveInput(e) {
-    console.log('saveinputtriggered')
     const input = currentInput.push(e.target.id);
-    populateDisplay(input);
+    populateDisplay(currentInput);
 }
 
 function operatorClick(e) {
@@ -54,6 +62,7 @@ function operatorClick(e) {
         operatorClicked = true;
     }
     savedOperator = e.target.id;
+    populateDisplay()
 }
 
 
@@ -62,7 +71,9 @@ let currentInput = [];
 let savedInput = [];
 let savedOperator = 0;
 let operatorClicked = false;
-const display = document.querySelector('.display');
+const savedDisplay = document.querySelector('.saved');
+const currentDisplay = document.querySelector('.current');
+const operatorDisplay = document.querySelector('.showoperator');
 const numberButtons = document.querySelectorAll('button.number');
 const operatorButtons = document.querySelectorAll('button.operator');
 const clearButton = document.querySelector('button.action.clear');
@@ -88,9 +99,10 @@ equalButton.addEventListener('click', () =>{
         const result = operate(n1, n2, savedOperator);
         currentInput.length = 0;
         currentInput.push(result);
+        savedInput.length = 0;
         operatorClicked = false;
         clearDisplay();
-        populateDisplay();
+        populateDisplay(currentInput);
         
         console.log(result);
     }
